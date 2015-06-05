@@ -613,7 +613,7 @@ var cobalt = {
             cobalt.utils.serialize(params, obj, traditional);
             return params.join('&').replace(/%20/g, '+')
         },
-        Array: function (obj) {
+        isArray: function (obj) {
             if (!Array.isArray) {
                 return Object.prototype.toString.call(obj) === '[object Array]';
             } else {
