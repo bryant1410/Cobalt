@@ -286,14 +286,14 @@ var cobalt = {
                 cobalt.utils.each(obj.buttons,function(index, button){
                     btns_str += "\t" + index + " - " + button + "\n";
                 });
-                var index = window.prompt(
+                var index = parseInt( window.prompt(
                     "Title : " + obj.title + "\n"
                         + "Message : " + obj.message + "\n"
-                        + "Choices : \n" + btns_str ,0);
+                        + "Choices : \n" + btns_str ,0), 10);
 
                 switch (typeof callback){
                     case "function":
-                        callback({ index : index });
+                        callback({ index : (index==NaN) ? undefined : index });
                         break;
                     case "string":
                         var str_call = callback + "({index : " + index + "})";
