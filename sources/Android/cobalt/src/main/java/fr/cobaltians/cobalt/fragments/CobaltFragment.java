@@ -103,7 +103,7 @@ public abstract class CobaltFragment extends Fragment implements IScrollListener
 
 	private CobaltPluginManager mPluginManager;
 
-    protected boolean mIsOustate = true;
+    private boolean mAllowCommit;
 
     /**************************************************************************************************
 	 * LIFECYCLE
@@ -112,16 +112,15 @@ public abstract class CobaltFragment extends Fragment implements IScrollListener
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         mContext = activity;
     }
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mPluginManager = CobaltPluginManager.getInstance(mContext);
         setRetainInstance(true);
+        mAllowCommit = true;
     }
 
 	@Override
@@ -159,13 +158,13 @@ public abstract class CobaltFragment extends Fragment implements IScrollListener
 	@Override
 	public void onStart() {
 		super.onStart();
-        mIsOustate = false;
 		addWebView();
 		preloadContent();
 	}
 
     @Override
     public void onResume() {
+        mAllowCommit = true;
         super.onResume();
 
         sendEvent(Cobalt.JSEventOnPageShown, null, null);
@@ -186,8 +185,8 @@ public abstract class CobaltFragment extends Fragment implements IScrollListener
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        mAllowCommit = false;
         super.onSaveInstanceState(outState);
-        mIsOustate = true;
         if (mWebView != null) {
             mWebView.saveState(outState);
         }
@@ -955,7 +954,7 @@ public abstract class CobaltFragment extends Fragment implements IScrollListener
                     // Shows Web layer
                     if (activity.findViewById(activity.getFragmentContainerId()) != null) {
                         fragmentTransition.add(activity.getFragmentContainerId(), webLayerFragment);
-                        fragmentTransition.commit();
+                        if (allowFragmentCommit()) fragmentTransition.commit();
                     }
                     else if (Cobalt.DEBUG) Log.e(Cobalt.TAG, TAG + " - showWebLayer: fragment container not found");
                 }
@@ -1000,6 +999,10 @@ public abstract class CobaltFragment extends Fragment implements IScrollListener
 			}
 		});
 	}
+
+    public boolean allowFragmentCommit() {
+        return mAllowCommit;
+    }
 	
 	/******************************************************************************************************************
 	 * ALERT DIALOG
