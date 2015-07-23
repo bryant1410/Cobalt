@@ -942,7 +942,7 @@ public abstract class CobaltFragment extends Fragment implements IScrollListener
                     fragmentTransition.setTransition(FragmentTransaction.TRANSIT_NONE);
                 }
 
-                if (CobaltActivity.class.isAssignableFrom(mContext.getClass()) && !mIsOustate) {
+                if (CobaltActivity.class.isAssignableFrom(mContext.getClass())) {
                     // Dismiss current Web layer if one is already shown
                     CobaltActivity activity = (CobaltActivity) mContext;
                     Fragment currentFragment = activity.getSupportFragmentManager().findFragmentById(activity.getFragmentContainerId());
