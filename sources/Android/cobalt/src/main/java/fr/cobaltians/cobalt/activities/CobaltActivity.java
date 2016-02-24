@@ -518,7 +518,11 @@ public abstract class CobaltActivity extends ActionBarActivity {
 	}
 
 	private void backWithSuper() {
-		super.onBackPressed();
+        try {
+            super.onBackPressed();
+        }catch (IllegalStateException e) {
+            if (Cobalt.DEBUG) Log.i(Cobalt.TAG, TAG + " onBackPressed: catch illegalStateException for fix crash on API > 11");
+        }
 	}
 
     /*********************************************************************************************************************
